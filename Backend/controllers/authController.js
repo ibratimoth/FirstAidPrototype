@@ -1,5 +1,4 @@
 const userModel = require("../models/userModel");
-const orderModel = require("../models/orderModel");
 const { hashPassword, comparePassword } = require("../helpers/authHelper");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");

@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Alert,
   Modal,
+  ScrollView
 } from "react-native";
 import axios from "axios";
 
@@ -89,7 +90,7 @@ const CategoryPage = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.header}>Create Category</Text>
       <TextInput
         style={styles.input}
@@ -174,14 +175,15 @@ const CategoryPage = () => {
           </View>
         </View>
       </Modal>
-    </View>
+      </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    padding: 20,
+
+    flexGrow: 1,
+    padding: 16
   },
   header: {
     fontSize: 20,
@@ -234,14 +236,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 5,
-    textDecorationLine: "underline", // Add underline for "Edit" button
+    textDecorationLine: "none", // Add underline for "Edit" button
+    
   },
   editButton: {
     backgroundColor: "lightblue", // Background color for "Edit" button
-    marginRight: 20, // Add margin to separate the buttons
+    marginRight: 20, // Add margin to separa te the buttons
   },
   deleteButton: {
-    backgroundColor: "red", // Background color for "Delete" button
+    backgroundColor: "#eb6434",
+    color: "white" // Background color for "Delete" button
   },
   modalContainer: {
     flex: 1,

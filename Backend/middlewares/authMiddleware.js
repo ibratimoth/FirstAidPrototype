@@ -32,7 +32,28 @@ const isAdmin = async (req,res,next) => {
         })
     }
 }
+const isNurse = async (req,res,next) => {
+    try {
+        const user = await userModel.findById(req.user._id)
+        if(user.role !== 2){
+            return res.status(401).send({
+                success: false,
+                message: 'Only a nurse is Authorized'
+            })
+        }else{
+            next()
+        }
+    } catch (error) {
+        console.log(error)
+        res.status(401).send({
+            success: false,
+            error,
+            message: " Error in nurse middleware",
+        })
+    }
+}
 
 module.exports = {requireSignIn,
-isAdmin
+isAdmin,
+isNurse
 }

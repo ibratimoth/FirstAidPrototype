@@ -5,14 +5,15 @@ const morgan = require('morgan')
 const authRoutes = require('./routes/authRoutes')
 const categoryRoutes = require("./routes/categoryRoutes")
 const productRoutes = require('./routes/productRoutes')
-const  connectDB  = require('./config/db')
+const connectDB  = require('./config/db')
 const cors = require('cors')
+
 
 //configure env
 dotenv.config()
 
 //database config
-// connectDB();
+connectDB();
 
 //rest object
 const app = express()

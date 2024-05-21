@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, Alert } from 'react-native'
 import React, {useState, useEffect} from 'react'
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer'
 import { TouchableOpacity } from 'react-native-gesture-handler'
@@ -60,17 +60,17 @@ const DrawerItems = props => {
 const DrawerContent = (props) => {
     const [auth, setAuth] = useAuth()
     const navigation = useNavigation()
-    function signOut(){
-        AsyncStorage.setItem("isLoggedIn", "")
-        AsyncStorage.setItem('token', '')
-        Toast.show({
-            type: 'success',
-            text1: 'Congratulation !!',
-            text2: 'Logout successfully',
-            visibilityTime: 5000
-          })
-        navigation.navigate('Login')
-    }
+  const handleLogout = () => {
+    setAuth({
+      ...auth,
+      user: null,
+      token: "",
+    })
+    AsyncStorage.removeItem("auth")
+    // Implement your logout logic here, for now, we will just navigate back to the login screen
+    Alert.alert("Loged out successfully")
+    navigation.navigate('LoginForm');
+  };
 
 //     const [userData, setUserData] = useState('')
 //   async function getData(){
@@ -114,7 +114,7 @@ const DrawerContent = (props) => {
       </DrawerContentScrollView>
       <View style={styles.bottomDrawerSection}>
             <DrawerItem
-            onPress={() => signOut()}
+            onPress={() => handleLogout()}
                 icon={({color, size}) => (
                     <Icon name = 'exit-to-app' color = {color} size = {size}/>
                 )}

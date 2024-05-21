@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, Text, StyleSheet,  Alert, TouchableOpacity } from 'react-native';
 import axios from 'axios'
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const RegistrationScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -12,6 +13,7 @@ const RegistrationScreen = ({ navigation }) => {
   const [sport, setSport] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [passwordVisible, setPasswordVisible] = useState(false);
 
   const handleRegister = async () => {
     if (!email || !username || !password || !contact || !city || !sport) {
@@ -61,13 +63,19 @@ const RegistrationScreen = ({ navigation }) => {
         placeholder="Enter your username"
         autoCapitalize="none"
       />
-      <TextInput
-        style={styles.input}
-        value={password}
-        onChangeText={setPassword}
-        placeholder="Enter your password"
-        secureTextEntry
-      />
+            <View style={styles.passwordContainer}>
+                <TextInput
+                    style={styles.passwordInput}
+                    value={password}
+                    onChangeText={setPassword}
+                    placeholder="Enter your password"
+                    autoCapitalize="none"
+                    secureTextEntry={!passwordVisible}
+                />
+                <TouchableOpacity onPress={() => setPasswordVisible(!passwordVisible)}>
+                    <Icon name={passwordVisible ? 'eye-off' : 'eye'} size={24} color="gray" />
+                </TouchableOpacity>
+            </View>
        <TextInput
         style={styles.input}
         value={contact}
@@ -119,6 +127,18 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     paddingHorizontal: 8,
   },
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderColor: '#ccc',
+    borderWidth: 1,
+    marginBottom: 12,
+    paddingHorizontal: 8,
+},
+passwordInput: {
+    flex: 1,
+    height: 40,
+},
   error: {
     color: 'red',
     marginBottom: 12,

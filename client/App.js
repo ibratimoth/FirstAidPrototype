@@ -26,6 +26,7 @@ import AdminPage from "./screens/Admin/AdminPage";
 import NursePage from "./screens/Admin/NursePage";
 import ProfilePage from "./screens/ProfilePage";
 import UpdateProfilePage from "./screens/UpdateProfilePage";
+import CategoryPage from "./screens/CategoryPage";
 
 
 // const toastConfig = {
@@ -126,6 +127,7 @@ const StackNav = () => {
       <Stack.Screen name="Nurse" component={NursePage} />
       <Stack.Screen name="Profile" component={ProfilePage} />
       <Stack.Screen name="Updateprofile" component={UpdateProfilePage} />
+      <Stack.Screen name="Categorypage" component={CategoryPage} />
     
       {/* <Stack.Screen
         name="RegisterForm"
@@ -154,6 +156,7 @@ const DrawerNav = () => {
 
 const AuthStack = () => {
   const Stack = createNativeStackNavigator();
+  const navigation = useNavigation()
   return (
     <Stack.Navigator
     screenOptions={{
@@ -167,6 +170,22 @@ const AuthStack = () => {
     >
       <Stack.Screen name="LoginForm" component={LoginForm} options={{ headerShown: false}} />
       <Stack.Screen name="RegisterForm" component={RegistrationScreen} options={{ headerShown: false }} />
+      <Stack.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          headerLeft: () => {
+            return (
+              <Icon
+                name="menu"
+                onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
+                size={30}
+                color="#fff"
+              />
+            );
+          },
+        }}
+      />
     </Stack.Navigator>
   );
 };

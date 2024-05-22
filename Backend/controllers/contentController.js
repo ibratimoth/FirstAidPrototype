@@ -8,6 +8,7 @@ const { GridFsStorage } = require("multer-gridfs-storage");
 const dotenv = require("dotenv");
 const connectDB = require("../config/db");
 const { GridFSBucket, ObjectID } = require("mongodb");
+const path = require('path');
 dotenv.config();
 
 
@@ -48,10 +49,13 @@ const createContentController = async (req, res) => {
         // Save the content to the database
         await newContent.save();
   
+           // Populate the category field with the injuryType
+      const populatedContent = await newContent.populate('category', 'injuryType')
+
         res.status(201).json({
           success: true,
           message: "Content created successfully.",
-          content: newContent,
+          content: populatedContent,
         });
       });
     } catch (error) {
@@ -99,11 +103,12 @@ const createContentController = async (req, res) => {
   
         // Save the updated content to the database
         await content.save();
-  
+      // Populate the category field with the injuryType
+      const populatedContent = await content.populate('category', 'injuryType')
         res.status(200).json({
           success: true,
           message: 'Content updated successfully.',
-          content: content,
+          content: populatedContent,
         });
       });
     } catch (error) {
@@ -120,7 +125,7 @@ const createContentController = async (req, res) => {
 const getAllContentController = async (req, res) => {
     try {
       // Fetch all content from the database
-      const contents = await contentModel.find();
+      const contents = await contentModel.find().populate('category', 'injuryType');
   
       res.status(200).json({
         success: true,
@@ -136,8 +141,152 @@ const getAllContentController = async (req, res) => {
       });
     }
   };
+
+  // Get single content controller
+const getSingleContentController = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Fetch the content by ID from the database
+    const content = await contentModel.findById(id).populate('category', 'injuryType');
+
+    if (!content) {
+      return res.status(404).json({
+        success: false,
+        message: 'Content not found.',
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Content retrieved successfully.',
+      content: content,
+    });
+  } catch (error) {
+    console.error('Error retrieving content:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error retrieving content.',
+      error: error.message,
+    });
+  }
+};
+
+// Delete content controller
+const deleteContentController = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Find the content by ID
+    const content = await contentModel.findById(id);
+
+    if (!content) {
+      return res.status(404).json({
+        success: false,
+        message: 'Content not found.',
+      });
+    }
+
+    // If there is a video file, delete it from the filesystem
+    if (content.video) {
+      const videoPath = path.join(__dirname, '../uploads', content.video);
+      fs.unlink(videoPath, (err) => {
+        if (err) {
+          console.error('Error deleting video file:', err);
+        }
+      });
+    }
+
+    // Delete the content from the database
+    await contentModel.findByIdAndDelete(id);
+
+    res.status(200).json({
+      success: true,
+      message: 'Content deleted successfully.',
+    });
+  } catch (error) {
+    console.error('Error deleting content:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error deleting content.',
+      error: error.message,
+    });
+  }
+};
+
+// Search content controller
+const searchContentController = async (req, res) => {
+  try {
+    const { title, description, category } = req.query;
+
+    // Build the search criteria
+    let searchCriteria = {};
+
+    if (title) {
+      searchCriteria.title = { $regex: title, $options: 'i' }; // Case-insensitive search
+    }
+
+    if (description) {
+      searchCriteria.description = { $regex: description, $options: 'i' }; // Case-insensitive search
+    }
+
+    if (category) {
+      searchCriteria.category = category;
+    }
+
+    // Fetch the content based on the search criteria
+    const contents = await contentModel.find(searchCriteria);
+
+    res.status(200).json({
+      success: true,
+      message: 'Contents retrieved successfully.',
+      contents: contents,
+    });
+  } catch (error) {
+    console.error('Error searching contents:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error searching contents.',
+      error: error.message,
+    });
+  }
+};
   
+// Get content by category controller
+const getContentByCategoryController = async (req, res) => {
+  try {
+    const { category } = req.params;
+
+    // Fetch the content based on the category
+    const contents = await contentModel.find({ category });
+
+    if (contents.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'No contents found in this category.',
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Contents retrieved successfully.',
+      contents: contents,
+    });
+  } catch (error) {
+    console.error('Error retrieving contents by category:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error retrieving contents by category.',
+      error: error.message,
+    });
+  }
+};
+
 module.exports = { createContentController,
     updateContentController,
-    getAllContentController
+    getAllContentController,
+    getSingleContentController,
+    deleteContentController,
+    searchContentController,
+    getContentByCategoryController,
  };

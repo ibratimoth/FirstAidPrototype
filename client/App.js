@@ -27,6 +27,8 @@ import NursePage from "./screens/Admin/NursePage";
 import ProfilePage from "./screens/ProfilePage";
 import UpdateProfilePage from "./screens/UpdateProfilePage";
 import CategoryPage from "./screens/CategoryPage";
+import ContentManagement from "./screens/ContentManagement";
+import ContentDetails from "./screens/ContentDetails";
 
 
 // const toastConfig = {
@@ -128,6 +130,8 @@ const StackNav = () => {
       <Stack.Screen name="Profile" component={ProfilePage} />
       <Stack.Screen name="Updateprofile" component={UpdateProfilePage} />
       <Stack.Screen name="Categorypage" component={CategoryPage} />
+      <Stack.Screen name="contents" component={ContentManagement} />
+      <Stack.Screen name="ContentDetails" component={ContentDetails} />
     
       {/* <Stack.Screen
         name="RegisterForm"

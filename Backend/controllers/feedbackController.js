@@ -1,39 +1,6 @@
 const feedbackModel = require('../models/feedbackModel')
 const mongoose = require('mongoose')
 
-
-// const createFeedbackController = async (req, res) => {
-//     try {
-//       const { title, description, user } = req.body;
-  
-//       // Create a new feedback instance
-//       const newFeedback = new feedbackModel({
-//         title: title || "Technical", // Default to "Technical" if title is not provided
-//         description,
-//         user,
-//       });
-  
-//       // Save the feedback to the database
-//       const savedFeedback = await newFeedback.save();
-  
-//       // Populate the 'user' field to get the user's name along with their ID
-//       await savedFeedback.populate("user", "username");
-  
-//       res.status(201).json({
-//         success: true,
-//         message: "Feedback created successfully.",
-//         feedback: savedFeedback,
-//       });
-//     } catch (error) {
-//       console.error("Error creating feedback:", error);
-//       return res.status(500).json({
-//         success: false,
-//         message: "Error creating feedback.",
-//         error: error.message,
-//       });
-//     }
-//   };
-
 const createFeedbackController = async (req, res) => {
     try {
       const { title, description, user } = req.body;

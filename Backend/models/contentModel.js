@@ -6,8 +6,8 @@ const contentSchema = new mongoose.Schema(
     title: {
       type: String,
       required: true,
-      trim: true, // Removes whitespace from both ends of a string
-      maxlength: 50, // Maximum length for the title
+      trim: true,
+      maxlength: 50,
     },
     description: {
       type: String,
@@ -15,14 +15,16 @@ const contentSchema = new mongoose.Schema(
     },
     category: {
       type: mongoose.ObjectId,
-      ref: "Category",
+      ref: 'Category',
       required: true,
     },
     video: {
-        type: String, // Store the video filename or path
-      },
+      type: mongoose.ObjectId, // Store the GridFS file ID
+      ref: 'videos.files', // Reference the files collection in GridFS
+    },
   },
   { timestamps: true }
 );
+
 
 module.exports = mongoose.model("Content", contentSchema);

@@ -12,9 +12,11 @@ import {useAuth} from '../context/auth'
 const DrawerList = [
     {icon: 'home-outline', label: 'Home', navigateTo: 'Home'},
     {icon: 'account-multiple', label: 'Profile', navigateTo: 'Profile'},
-    {icon: 'account-group', label: 'User', navigateTo: 'User'},
     {icon: 'login-variant', label: 'Admin', navigateTo: 'Admin'},
     {icon: 'login-variant', label: 'Nurse', navigateTo: 'Nurse'},
+    {icon: 'message', label: 'feedback', navigateTo: 'feedback'},
+    {icon: 'message-alert', label: 'T-feedback', navigateTo: 'technical'},
+    {icon: 'message-alert', label: 'C-feedback', navigateTo: 'contentfeed'},
 ]
 
 const DrawerLayout = ({icon, label, navigateTo}) => {
@@ -39,11 +41,12 @@ const DrawerItems = props => {
     // : DrawerList.filter(item => item.navigateTo !== 'Admin');
     const filteredDrawerList = DrawerList.filter(item => {
         if (auth?.user?.role === 0) {
-          return item.navigateTo !== 'Admin' && item.navigateTo !== 'Nurse';
+          return item.navigateTo !== 'Admin' && item.navigateTo !== 'Nurse' && item.navigateTo !== 'technical' && item.navigateTo !== 'contentfeed';
         } else if (auth?.user?.role === 2) {
-          return item.navigateTo !== 'Admin';
+          return item.navigateTo !== 'Admin' && item.navigateTo !== 'technical';
         } else {
-          return true; // Show all items for role 1
+        //   return true; // Show all items for role 1
+          return item.navigateTo !== 'Nurse' && item.navigateTo !== 'contentfeed' && item.navigateTo !== 'feedback';
         }
       });
     return filteredDrawerList.map((el, i) => {

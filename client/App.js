@@ -29,6 +29,9 @@ import UpdateProfilePage from "./screens/UpdateProfilePage";
 import CategoryPage from "./screens/CategoryPage";
 import ContentManagement from "./screens/ContentManagement";
 import ContentDetails from "./screens/ContentDetails";
+import CreateFeedbackPage from "./screens/createFeedbackPage";
+import TechnicalContentPage from "./screens/TechnicalContentPage";
+import ContentFeedbackPage from "./screens/ContentFeedbackPage";
 
 
 // const toastConfig = {
@@ -132,6 +135,9 @@ const StackNav = () => {
       <Stack.Screen name="Categorypage" component={CategoryPage} />
       <Stack.Screen name="contents" component={ContentManagement} />
       <Stack.Screen name="ContentDetails" component={ContentDetails} />
+      <Stack.Screen name="feedback" component={CreateFeedbackPage} />
+      <Stack.Screen name="technical" component={TechnicalContentPage} />
+      <Stack.Screen name="contentfeed" component={ContentFeedbackPage} />
     
       {/* <Stack.Screen
         name="RegisterForm"

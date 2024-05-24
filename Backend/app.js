@@ -5,6 +5,7 @@ const morgan = require('morgan')
 const authRoutes = require('./routes/authRoutes')
 const categoryRoutes = require("./routes/categoryRoutes")
 const contentRoutes = require('./routes/contentRoutes')
+const feedbackRoutes = require('./routes/feedbackRoutes')
 const connectDB  = require('./config/db')
 const cors = require('cors')
 
@@ -28,6 +29,7 @@ app.use(express.urlencoded({ extended: false}));
 app.use('/api/v1/auth', authRoutes)
 app.use('/api/v1/category', categoryRoutes)
 app.use('/api/v1/content', contentRoutes)
+app.use('/api/v1/feedback', feedbackRoutes)
 //rest api
 app.get('/',(req,res) => {
     res.send("<h1>Welcome to ecommerce app</h1>")

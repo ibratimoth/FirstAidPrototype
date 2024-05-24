@@ -26,7 +26,14 @@ const ContentDetails = () => {
     try {
       const response = await axios.get(`http://192.168.211.231:8082/api/v1/content/get-content/${contentId}`);
       setContent(response.data.content);
-      setVideoUri(response.data.content.video ? `http://192.168.211.231:8082/uploads/${response.data.content.video}` : null);
+      if (response.data.content.video) {
+        const videoResponse = await axios.get(`http://192.168.211.231:8082/api/v1/content/video/${response.data.content.video}`, {
+          responseType: 'blob',
+        });
+        const videoBlob = new Blob([videoResponse.data], { type: 'video/mp4' });
+        const videoUrl = URL.createObjectURL(videoBlob);
+        setVideoUri(videoUrl);
+      }
     } catch (error) {
       Alert.alert('Error', 'Could not fetch content details');
     }

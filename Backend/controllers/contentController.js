@@ -1,72 +1,158 @@
-const fs = require("fs");
 const mongoose = require("mongoose");
-const contentModel = require("../models/contentModel");
-const categoryModel = require("../models/categoryModel");
 const Grid = require("gridfs-stream");
 const multer = require("multer");
 const { GridFsStorage } = require("multer-gridfs-storage");
 const dotenv = require("dotenv");
 const connectDB = require("../config/db");
-const { GridFSBucket, ObjectID } = require("mongodb");
-const path = require('path');
+const contentModel = require("../models/contentModel");
+
 dotenv.config();
 
+const mongoURI = process.env.MONGO_URL;
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, "uploads/"); // Specify the directory where uploaded files will be stored
-    },
-    filename: function (req, file, cb) {
-      cb(null, Date.now() + "-" + file.originalname); // Generate unique filename
-    },
+// Connect to MongoDB
+connectDB();
+
+// Initialize GridFS and GridFSBucket
+let gfs, gridfsBucket;
+
+mongoose.connection.once('open', () => {
+  gridfsBucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
+    bucketName: 'videos',
   });
-  
-  // Initialize multer upload middleware
-  const upload = multer({ storage: storage }).single("video");
+  gfs = Grid(mongoose.connection.db, mongoose.mongo);
+  gfs.collection('videos');
+});
 
+// Create a storage object with a given configuration
+const storage = new GridFsStorage({
+  url: mongoURI,
+  file: (req, file) => {
+    return {
+      bucketName: 'videos', // Bucket name for storing files
+      filename: Date.now() + '-' + file.originalname, // Unique filename
+    };
+  },
+});
+
+// Create multer middleware
+const upload = multer({ storage });
+
+// Controller to handle content creation
 const createContentController = async (req, res) => {
-    try {
-      // Handle file upload
-      upload(req, res, async function (err) {
-        if (err) {
-          console.error("Error uploading video:", err);
-          return res.status(500).json({
-            success: false,
-            message: "Error uploading video.",
-            error: err.message,
-          });
-        }
-  
-        // Create a new content instance
-        const { title, description, category } = req.body;
-        const newContent = new contentModel({
-          title,
-          description,
-          category,
-          video: req.file ? req.file.filename : "", // Store the filename in the model
+  try {
+    // Handle file upload
+    upload.single('video')(req, res, async function (err) {
+      if (err) {
+        console.error('Error uploading video:', err);
+        return res.status(500).json({
+          success: false,
+          message: 'Error uploading video.',
+          error: err.message,
         });
-  
-        // Save the content to the database
-        await newContent.save();
-  
-           // Populate the category field with the injuryType
-      const populatedContent = await newContent.populate('category', 'injuryType')
+      }
 
-        res.status(201).json({
-          success: true,
-          message: "Content created successfully.",
-          content: populatedContent,
-        });
+      // Create a new content instance
+      const { title, description, category } = req.body;
+      const newContent = new contentModel({
+        title,
+        description,
+        category,
+        video: req.file ? req.file.id : '', // Store the file ID in the model
       });
-    } catch (error) {
-      console.error("Error creating content:", error);
-      return res.status(500).json({
-        success: false,
-        message: "Error creating content.",
-        error: error.message,
+
+      // Save the content to the database
+      await newContent.save();
+
+      // Populate the category field with the injuryType
+      const populatedContent = await newContent.populate('category', 'injuryType');
+
+      res.status(201).json({
+        success: true,
+        message: 'Content created successfully.',
+        content: populatedContent,
       });
+    });
+  } catch (error) {
+    console.error('Error creating content:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Error creating content.',
+      error: error.message,
+    });
+  }
+};
+
+// Controller to handle video retrieval
+const getVideoById = (req, res) => {
+  try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ err: 'Invalid video ID' });
     }
-  };
+
+    const videoId = new mongoose.Types.ObjectId(req.params.id);
+
+    if (!gfs) {
+      return res.status(500).json({ err: 'GridFS not initialized' });
+    }
+
+    gfs.files.findOne({ _id: videoId }, (err, file) => {
+      if (err) {
+        console.error('Error finding file:', err);
+        return res.status(500).json({ err: 'Error finding file' });
+      }
+
+      if (!file || file.length === 0) {
+        return res.status(404).json({ err: 'No file exists' });
+      }
+
+      if (file.contentType === 'video/mp4' || file.contentType === 'video/webm') {
+        const readstream = gridfsBucket.openDownloadStream(file._id);
+        res.set('Content-Type', file.contentType);
+        readstream.pipe(res);
+      } else {
+        res.status(404).json({ err: 'Not a video' });
+      }
+    });
+  } catch (error) {
+    console.error('Error retrieving video:', error);
+    return res.status(500).json({ err: 'Error retrieving video' });
+  }
+};
+// // Controller to handle fetching video by ID
+// const getVideoById = async (req, res) => {
+//   try {
+//     const videoId = new ObjectId(req.params.id);
+
+//     gfs.files.findOne({ _id: videoId }, (err, file) => {
+//       if (!file || file.length === 0) {
+//         return res.status(404).json({
+//           success: false,
+//           message: 'No file exists',
+//         });
+//       }
+
+//       // Check if the file is a video
+//       if (file.contentType === 'video/mp4' || file.contentType === 'video/webm') {
+//         // Read output to browser
+//         const readstream = gfs.createReadStream(file.filename);
+//         readstream.pipe(res);
+//       } else {
+//         res.status(404).json({
+//           success: false,
+//           message: 'Not a video file',
+//         });
+//       }
+//     });
+//   } catch (error) {
+//     console.error('Error fetching video:', error);
+//     return res.status(500).json({
+//       success: false,
+//       message: 'Error fetching video.',
+//       error: error.message,
+//     });
+//   }
+// };
 
   const updateContentController = async (req, res) => {
     try {
@@ -289,4 +375,5 @@ module.exports = { createContentController,
     deleteContentController,
     searchContentController,
     getContentByCategoryController,
+    getVideoById,
  };

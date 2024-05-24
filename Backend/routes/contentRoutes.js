@@ -6,7 +6,8 @@ const {
     getSingleContentController,
     deleteContentController,
     searchContentController,
-    getContentByCategoryController
+    getContentByCategoryController,
+    getVideoById
 } = require('../controllers/contentController')
 const { requireSignIn, isNurse } = require('../middlewares/authMiddleware')
 const router = express.Router()
@@ -23,6 +24,9 @@ router.get('/get-all-content', requireSignIn,getAllContentController);
 
 // Get single content route
 router.get('/get-content/:id', requireSignIn,  getSingleContentController);
+
+// Route to get video by ID
+router.get('/video/:id', requireSignIn, getVideoById);
 
 // Delete content route
 router.delete('/delete-content/:id', requireSignIn, isNurse, deleteContentController);

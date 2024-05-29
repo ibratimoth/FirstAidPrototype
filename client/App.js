@@ -37,61 +37,62 @@ import { useFonts, Inter_400Regular, Inter_600SemiBold } from '@expo-google-font
 import { Roboto_400Regular } from '@expo-google-fonts/roboto';
 
 
-// const toastConfig = {
-//   /*
-//     Overwrite 'success' type,
-//     by modifying the existing `BaseToast` component
-//   */
-//   success: (props) => (
-//     <BaseToast
-//       {...props}
-//       style={{
-//         borderLeftColor: "#eb6434",
-//         borderLeftWidth: 7,
-//         width: "70%",
-//         height: 50,
-//         borderRightColor: "#eb6434",
-//         borderRightWidth: 7,
-//       }}
-//       contentContainerStyle={{ paddingHorizontal: 15 }}
-//       text1Style={{
-//         fontSize: 17,
-//         fontWeight: "700",
-//         color: "#345ea3",
-//       }}
-//       text2Style={{
-//         fontSize: 14,
-//         color: "#345ea3",
-//       }}
-//     />
-//   ),
-//   /*
-//     Overwrite 'error' type,
-//     by modifying the existing `ErrorToast` component
-//   */
-//   error: (props) => (
-//     <ErrorToast
-//       {...props}
-//       text1NumberOfLines={3}
-//       style={{
-//         borderLeftColor: "red",
-//         borderLeftWidth: 7,
-//         width: "70%",
-//         height: 70,
-//         borderRightColor: "red",
-//         borderRightWidth: 7,
-//       }}
-//       contentContainerStyle={{ paddingHorizontal: 15 }}
-//       text1Style={{
-//         fontSize: 17,
-//         fontWeight: "700",
-//       }}
-//       text2Style={{
-//         fontSize: 14,
-//       }}
-//     />
-//   ),
-// };
+const toastConfig = {
+  /*
+    Overwrite 'success' type,
+    by modifying the existing `BaseToast` component
+  */
+  success: (props) => (
+    <BaseToast
+      {...props}
+      style={{
+        borderLeftColor: "#eb6434",
+        borderLeftWidth: 7,
+        width: "70%",
+        height: 50,
+        borderRightColor: "#eb6434",
+        borderRightWidth: 7,
+      }}
+      contentContainerStyle={{ paddingHorizontal: 15 }}
+      text1Style={{
+        fontSize: 17,
+        fontWeight: "700",
+        color: "#345ea3",
+      }}
+      text2Style={{
+        fontSize: 14,
+        color: "#345ea3",
+      }}
+    />
+  ),
+  /*
+    Overwrite 'error' type,
+    by modifying the existing `ErrorToast` component
+  */
+  error: (props) => (
+    <ErrorToast
+      {...props}
+      text1NumberOfLines={3}
+      style={{
+        borderLeftColor: "red",
+        borderLeftWidth: 7,
+        width: "70%",
+        height: 70,
+        borderRightColor: "red",
+        borderRightWidth: 7,
+      }}
+      contentContainerStyle={{ paddingHorizontal: 15 }}
+      text1Style={{
+        fontSize: 17,
+        fontWeight: "700",
+      }}
+      text2Style={{
+        fontSize: 14,
+      }}
+    />
+  ),
+};
+
 const StackNav = () => {
   const Stack = createNativeStackNavigator();
   const navigation = useNavigation()
@@ -105,6 +106,9 @@ const StackNav = () => {
         },
         headerTintColor: "#fff",
         headerTitleAlign: "center",
+        headerTitleStyle: {
+          fontFamily: 'serif'
+        }
       }}
     >
       <Stack.Screen
@@ -184,7 +188,7 @@ const AuthStack = () => {
     }}
     >
       <Stack.Screen name="LoginForm" component={LoginForm} options={{ headerShown: false, 
-          statusBarColor: "#f5f7fa"}} />
+          statusBarColor: "#eb6434"}} />
       <Stack.Screen name="RegisterForm" component={RegistrationScreen} options={{ headerShown: false }} />
       <Stack.Screen
         name="Home"

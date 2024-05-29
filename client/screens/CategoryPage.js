@@ -99,7 +99,7 @@ const CategoryPage = () => {
         placeholder="Enter injury type"
       />
       <TouchableOpacity style={styles.button} onPress={handleCreateCategory}>
-        <Text>Create</Text>
+        <Text style = {styles.buttontxt}>Create</Text>
       </TouchableOpacity>
 
       <Text style={styles.header}>Categories</Text>
@@ -126,7 +126,7 @@ const CategoryPage = () => {
             ) : (
               <>
                 <View style={styles.categoryContainer}>
-                  <Text>{category.injuryType}</Text>
+                  <Text style={styles.injurytype}>{category.injuryType}</Text>
                 </View>
                 <TouchableOpacity
                   onPress={() => {
@@ -181,7 +181,6 @@ const CategoryPage = () => {
 
 const styles = StyleSheet.create({
   container: {
-
     flexGrow: 1,
     padding: 16
   },
@@ -189,6 +188,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 10,
+    fontFamily: 'serif'
   },
   input: {
     borderWidth: 1,
@@ -198,6 +198,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     height: 40, // Set a fixed height for the TextInput
     width: "100%",
+    fontFamily: 'serif',
+    fontSize: 16
   },
   updateinput: {
     borderWidth: 1,
@@ -207,6 +209,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     height: 40, // Set a fixed height for the TextInput
     width: "40%",
+    fontFamily: 'serif',
+    fontSize: 16
   },
   button: {
     backgroundColor: "lightblue",
@@ -214,6 +218,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 5,
     marginBottom: 20,
+  },
+  buttontxt: {
+    fontFamily: 'serif',
+    fontSize: 16
   },
   table: {
     borderWidth: 1,
@@ -242,10 +250,12 @@ const styles = StyleSheet.create({
   editButton: {
     backgroundColor: "lightblue", // Background color for "Edit" button
     marginRight: 20, // Add margin to separa te the buttons
+    fontFamily: 'serif'
   },
   deleteButton: {
     backgroundColor: "#eb6434",
-    color: "white" // Background color for "Delete" button
+    color: "white", // Background color for "Delete" button
+    fontFamily: 'serif'
   },
   modalContainer: {
     flex: 1,
@@ -269,6 +279,10 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
   },
+  injurytype: {
+    fontFamily: 'serif',
+    fontSize: 16
+  }
 });
 
 export default CategoryPage;

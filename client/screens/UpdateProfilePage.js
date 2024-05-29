@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import { useAuth } from '../context/auth';
@@ -46,7 +46,6 @@ const UpdateProfilePage = () => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.header}>Update Profile</Text>
             <TextInput
                 style={styles.input}
                 placeholder="Username"
@@ -77,7 +76,9 @@ const UpdateProfilePage = () => {
                 value={sport}
                 onChangeText={setSport}
             />
-            <Button title="Update Profile" onPress={handleUpdateProfile} />
+            <TouchableOpacity style={styles.button} onPress={handleUpdateProfile}>
+        <Text style={styles.buttonText}>UPDATE PROFILE</Text>
+      </TouchableOpacity>
         </View>
     );
 };
@@ -86,6 +87,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
+        marginTop: 40
     },
     header: {
         fontSize: 24,
@@ -98,7 +100,26 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         marginBottom: 12,
         padding: 10,
+        fontFamily: 'serif',
+        fontSize: 15,
+        borderRadius: 5
     },
+    button:{
+        backgroundColor: '#eb6434',
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 5,
+        marginBottom: 10,
+        marginTop: 20
+      },
+      buttonText: {
+        fontSize: 17,
+        color: '#fff',
+        paddingVertical: 1, // Padding inside the button text
+        paddingHorizontal: 10, // Padding inside the button text
+        textAlign: 'center',
+        fontFamily: 'serif'
+      },
 });
 
 export default UpdateProfilePage;

@@ -1,9 +1,11 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useAuth } from '../../context/auth';
 
 const NursePage = () => {
   const navigation = useNavigation();
+  const [auth] = useAuth()
 
   const navigateToCategoryPage = () => {
     navigation.navigate('Categorypage');
@@ -15,7 +17,7 @@ const NursePage = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Nurse Page</Text>
+      <Text style={styles.header}>You are Welcome {auth?.user?.username}</Text>
       <TouchableOpacity style={styles.button} onPress={navigateToCategoryPage}>
         <Text style={styles.buttonText}>Go to Create Category Page</Text>
       </TouchableOpacity>
@@ -29,24 +31,26 @@ const NursePage = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     padding: 20,
   },
   header: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
+    textAlign: 'center',
+    fontFamily: 'serif'
   },
   button: {
-    backgroundColor: 'blue',
+    backgroundColor: '#f2e0cd',
     padding: 15,
     borderRadius: 10,
     marginVertical: 10, // Added margin to separate the buttons
   },
   buttonText: {
-    color: 'white',
+    color: 'black',
     fontSize: 16,
+    textAlign: 'center',
+    fontFamily: 'serif'
   },
 });
 

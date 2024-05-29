@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, StyleSheet } from 'react-native';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import { View, Text, FlatList, StyleSheet } from "react-native";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import axios from "axios";
 
 const ContentFeedbackPage = () => {
   const [feedbackList, setFeedbackList] = useState([]);
@@ -11,10 +12,12 @@ const ContentFeedbackPage = () => {
 
   const fetchContentFeedback = async () => {
     try {
-      const response = await axios.get('http://192.168.211.231:8082/api/v1/feedback/content-feedback');
+      const response = await axios.get(
+        "http://192.168.211.231:8082/api/v1/feedback/content-feedback"
+      );
       setFeedbackList(response.data.feedback);
     } catch (error) {
-      console.error('Error fetching content feedback:', error);
+      console.error("Error fetching content feedback:", error);
     }
   };
 
@@ -26,9 +29,18 @@ const ContentFeedbackPage = () => {
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
           <View style={styles.feedbackItem}>
-            <Text>Title: {item.title}</Text>
-            <Text>Description: {item.description}</Text>
-            <Text>User: {item.username}</Text>
+            <Text style = {styles.txt}>{item.description}</Text>
+            <Text style = {styles.txt}>By: {item.username}</Text>
+            <View style = {styles.dt}>
+              <View style={styles.row}>
+              <Icon name="calendar-month-outline" color="#eb6434" size={15} />
+              <Text>{new Date(item.createdAt).toLocaleDateString()}</Text>
+              </View>
+              <View style={styles.row}>
+              <Icon name="clock-time-eight-outline" color="#eb6434" size={15} />
+              <Text>{new Date(item.createdAt).toLocaleTimeString()}</Text>
+              </View>
+            </View>
           </View>
         )}
       />
@@ -43,14 +55,29 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 10,
+    textAlign: "center",
+    fontFamily: "serif",
   },
   feedbackItem: {
-    borderWidth: 1,
-    borderColor: '#ccc',
     padding: 10,
     marginBottom: 10,
+    backgroundColor: '#f2e0cd',
+    borderRadius: 5
+  },
+  dt: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  txt : {
+    fontFamily: 'serif'
+  },
+  row: {
+    flexDirection: "row",
+    marginBottom: 5,
+    paddingTop: 5,
+    paddingEnd: 20
   },
 });
 

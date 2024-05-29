@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, Alert, StyleSheet, SafeAreaView} from 'react-native';
+import { View, Text, TextInput, Button, Alert, StyleSheet, SafeAreaView, TouchableOpacity} from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import {useAuth} from './../context/auth'
 import axios from 'axios';
@@ -43,7 +43,7 @@ const CreateFeedbackPage = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text>Title:</Text>
+      <Text style = {styles.title}>Title:</Text>
       <Picker
         selectedValue={selectedTitle}
         onValueChange={(itemValue) => setSelectedTitle(itemValue)}
@@ -53,14 +53,16 @@ const CreateFeedbackPage = () => {
           <Picker.Item key={title} label={title} value={title} />
         ))}
       </Picker>
-      <Text>Comment:</Text>
+      <Text style = {styles.title}>Comment:</Text>
       <TextInput
         style={styles.input}
         onChangeText={setComment}
         value={comment}
         multiline={true}
       />
-      <Button title="Submit" onPress={handleSubmit} />
+      <TouchableOpacity onPress={handleSubmit} style={styles.button}>
+          <Text style={styles.buttonText}>SUBMIT</Text>
+        </TouchableOpacity>
     </SafeAreaView>
   );
 };
@@ -79,6 +81,29 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     padding: 8,
     height: 100,
+    borderRadius: 5,
+    fontFamily: 'serif'
+  },
+  title: {
+    fontSize: 17,
+    fontFamily: 'serif',
+    marginBottom: 10
+  },
+  button:{
+    backgroundColor: '#eb6434',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    marginBottom: 5,
+    marginTop: 20
+  },
+  buttonText: {
+    fontSize: 17,
+    color: '#fff',
+    paddingVertical: 1, // Padding inside the button text
+    paddingHorizontal: 10, // Padding inside the button text
+    textAlign: 'center',
+    fontFamily: 'serif'
   },
 });
 

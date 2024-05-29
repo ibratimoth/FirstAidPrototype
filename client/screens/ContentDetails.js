@@ -217,7 +217,7 @@ const ContentDetails = () => {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    fontFamily: 'Roboto_400Regular',
+    fontFamily: 'serif',
   },
   modalContainer: {
     padding: 20,
@@ -227,7 +227,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 10,
     padding: 8,
-    fontFamily: 'Roboto_400Regular',
+    fontFamily: 'serif',
   },
   picker: {
     borderWidth: 1,
@@ -240,22 +240,23 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: 'red',
-    fontFamily: 'Roboto_400Regular',
+    fontFamily: 'serif',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    fontFamily: 'Roboto_400Regular',
+    fontFamily: 'serif',
   },
   description: {
     fontSize: 18,
     marginVertical: 10,
     textAlign: 'justify',
-    fontFamily: 'Roboto_400Regular',
+    fontFamily: 'serif',
   },
   category: {
     fontSize: 18,
     marginBottom: 10,
+    fontFamily: 'serif',
   },
 });
 

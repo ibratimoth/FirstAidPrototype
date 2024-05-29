@@ -169,19 +169,19 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     backgroundColor: '#fff',
-    fontFamily: 'Roboto_400Regular',
+    fontFamily: 'serif',
   },
   title: {
     fontSize: 24,
     marginBottom: 24,
     textAlign: 'center',
-    fontFamily: 'Roboto_400Regular',
+    fontFamily: 'serif',
   },
   text: {
     fontSize: 18,
     marginBottom: 24,
     textAlign: 'center',
-    fontFamily: 'Inter_600SemiBold',
+    fontFamily: 'serif',
   },
   row: {
     marginBottom: 20,
@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     marginBottom: 10,
-    fontFamily: 'Roboto_400Regular',
+    fontFamily: 'serif',
   },
   horizontalScroll: {
     flexDirection: 'row',
@@ -212,13 +212,13 @@ const styles = StyleSheet.create({
   },
   itemText: {
     fontSize: 16,
-    fontFamily: 'Roboto_400Regular',
+    fontFamily: 'serif',
     padding: 20,
   },
   categoryText: {
     fontSize: 16,
     marginLeft: 5,
-    fontFamily: 'Roboto_400Regular',
+    fontFamily: 'serif',
   },
   slide: {
     backgroundColor: "#fff",

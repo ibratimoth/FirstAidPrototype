@@ -14,6 +14,7 @@ import { useAuth } from "../../context/auth";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Icon from "react-native-vector-icons/Ionicons";
+import Toast from 'react-native-toast-message';
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -66,7 +67,7 @@ const LoginForm = () => {
 
   return (
     <View style={styles.container}>
-      <Text>LOGIN</Text>
+      <Text style={styles.page}>LOGIN HERE</Text>
       <View style = {styles.imgCont}>
       <Image 
         source={require('./../../assets/login2.png')} 
@@ -127,7 +128,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     paddingHorizontal: 8,
     fontFamily: 'serif',
-    fontSize: 15
+    fontSize: 15,
+    borderRadius: 5
   },
   passwordContainer: {
     flexDirection: 'row',
@@ -178,6 +180,13 @@ passwordInput: {
   imgCont: {
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  page: {
+    textAlign: 'center',
+    paddingBottom: 10,
+    fontSize: 20,
+    fontFamily: 'serif',
+    fontWeight: 'bold'
   }
 });
 

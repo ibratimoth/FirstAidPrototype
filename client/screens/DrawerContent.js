@@ -26,9 +26,10 @@ const DrawerLayout = ({icon, label, navigateTo}) => {
     const navigation = useNavigation()
 
     return(
-        <DrawerItem
+        <DrawerItem style={styles.drawerIt}
             icon = {({color, size}) => <Icon name={icon} color={color} size={size}/>}
             label = {label}
+            labelStyle={styles.drawerItemLabel} 
             onPress={() => {
                 navigation.navigate(navigateTo)
             }}
@@ -109,7 +110,7 @@ let [fontsLoaded] = useFonts({
                 </View>
             </TouchableOpacity>
             <View style={styles.drawerSection}>
-                <DrawerItems style={styles.drawerIt}/>
+                <DrawerItems/>
             </View>
         </View>
       </DrawerContentScrollView>
@@ -120,6 +121,7 @@ let [fontsLoaded] = useFonts({
                     <Icon name = 'exit-to-app' color = {color} size = {size}/>
                 )}
                 label = 'Sign Out'
+                labelStyle={styles.drawerItemLabel} 
             />
       </View>
     </View>
@@ -132,18 +134,18 @@ const styles = StyleSheet.create({
     },
     userInfoSection:{
         paddingLeft: 20,
-        fontFamily: 'Roboto_400Regular'
+        fontFamily: 'serif'
     },
     title: {
         fontSize: 16,
         marginTop: 3,
         fontWeight: 'bold',
-        fontFamily: 'Roboto_400Regular'
+        fontFamily: 'serif'
     },
     caption: {
         fontSize: 13,
         lineHeight: 14,
-        fontFamily: 'Roboto_400Regular'
+        fontFamily: 'serif'
     },
     drawerSection: {
         marginTop: 25,
@@ -156,8 +158,9 @@ const styles = StyleSheet.create({
         borderTopWidth: 1,
         borderBottomWidth: 0,
     },
-    drawerIt:{
-        fontFamily: 'Roboto_400Regular'
+    drawerItemLabel: {
+        fontFamily: 'serif',  // Custom font family for drawer item labels
+        fontSize: 17
     }
 })
 export default DrawerContent

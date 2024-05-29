@@ -60,6 +60,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginBottom: 24,
     textAlign: 'center',
+    fontFamily: 'serif'
   },
   item: {
     backgroundColor: '#f2e0cd',
@@ -68,7 +69,9 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   itemText: {
-    fontSize: 16,
+    fontSize: 17,
+    textAlign: 'center',
+    fontFamily: 'serif'
   },
   errorText: {
     fontSize: 16,

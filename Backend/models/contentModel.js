@@ -18,6 +18,10 @@ const contentSchema = new mongoose.Schema(
       ref: 'Category',
       required: true,
     },
+    injuryType: {
+      type: String,
+      required: true,
+    },
     video: {
       type: mongoose.ObjectId, // Store the GridFS file ID
       ref: 'videos.files', // Reference the files collection in GridFS

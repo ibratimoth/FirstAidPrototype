@@ -54,10 +54,20 @@ const createContentController = async (req, res) => {
 
       // Create a new content instance
       const { title, description, category } = req.body;
+
+       // Fetch user details to get the username
+       const categoryDetails = await mongoose.model('Category').findById(category).select('injuryType');
+       if (!categoryDetails) {
+         return res.status(404).json({
+           success: false,
+           message: 'category not found.',
+         });
+       }
       const newContent = new contentModel({
         title,
         description,
         category,
+        injuryType: categoryDetails.injuryType,
         video: req.file ? req.file.id : '', // Store the file ID in the model
       });
 
@@ -258,6 +268,41 @@ const getSingleContentController = async (req, res) => {
   }
 };
 
+const getContentsByCategoryController = async (req, res) => {
+  try {
+    const { categoryId } = req.params;
+
+    if (!categoryId) {
+      return res.status(400).send({
+        success: false,
+        message: 'Category ID is required',
+      });
+    }
+
+    const contents = await contentModel.find({ category: categoryId }).populate('category', 'injuryType');
+
+    if (!contents.length) {
+      return res.status(404).send({
+        success: false,
+        message: 'No content found for the specified category',
+      });
+    }
+
+    res.status(200).send({
+      success: true,
+      message: 'Contents retrieved successfully',
+      contents,
+    });
+  } catch (error) {
+    console.error('Error retrieving contents by category:', error);
+    res.status(500).send({
+      success: false,
+      message: 'Error retrieving contents by category',
+      error: error.message,
+    });
+  }
+};
+
 // Delete content controller
 const deleteContentController = async (req, res) => {
   try {
@@ -273,12 +318,16 @@ const deleteContentController = async (req, res) => {
       });
     }
 
-    // If there is a video file, delete it from the filesystem
+    // If there is a video file, delete it from GridFS
     if (content.video) {
-      const videoPath = path.join(__dirname, '../uploads', content.video);
-      fs.unlink(videoPath, (err) => {
+      await gridfsBucket.delete(new mongoose.Types.ObjectId(content.video), (err) => {
         if (err) {
-          console.error('Error deleting video file:', err);
+          console.error('Error deleting video file from GridFS:', err);
+          return res.status(500).json({
+            success: false,
+            message: 'Error deleting video file.',
+            error: err.message,
+          });
         }
       });
     }
@@ -299,6 +348,7 @@ const deleteContentController = async (req, res) => {
     });
   }
 };
+
 
 // Search content controller
 const searchContentController = async (req, res) => {
@@ -376,4 +426,5 @@ module.exports = { createContentController,
     searchContentController,
     getContentByCategoryController,
     getVideoById,
+    getContentsByCategoryController
  };

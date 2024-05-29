@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, Button, Alert, StyleSheet, SafeAreaView, Modal, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, Button, Alert, StyleSheet, SafeAreaView, Modal, TouchableOpacity, ScrollView } from 'react-native';
 import axios from 'axios';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { Picker } from '@react-native-picker/picker';
@@ -114,6 +114,7 @@ const ContentDetails = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <ScrollView showsVerticalScrollIndicator = {false}>
       <View>
         <Text style={styles.title}>{content.title}</Text>
         {videoUri && (
@@ -129,7 +130,7 @@ const ContentDetails = () => {
         <Button title="Update Content" onPress={() => setModalVisible(true)} />
         <Button title="Delete Content" onPress={handleDelete} />
       </View>
-
+      </ScrollView>
       <Modal
         visible={modalVisible}
         animationType="slide"
@@ -231,6 +232,7 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 18,
     marginVertical: 10,
+    textAlign: 'justify',
   },
   category: {
     fontSize: 18,

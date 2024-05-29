@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Alert,
   TouchableOpacity,
+  Image
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../../context/auth";
@@ -65,6 +66,13 @@ const LoginForm = () => {
 
   return (
     <View style={styles.container}>
+      <Text>LOGIN</Text>
+      <View style = {styles.imgCont}>
+      <Image 
+        source={require('./../../assets/login2.png')} 
+        style={styles.image} 
+      />
+      </View>
       <Text style={styles.label}>Email:</Text>
       <TextInput
         style={styles.input}
@@ -90,8 +98,9 @@ const LoginForm = () => {
             </View>
 
       {error ? <Text style={styles.error}>{error}</Text> : null}
-
-      <Button title="Login" onPress={handleLogin} />
+<TouchableOpacity style={styles.button} onPress={handleLogin}>
+      <Text style={styles.buttonText}>LOGIN</Text>
+  </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate("RegisterForm")}>
         <Text style={styles.registerText}>
           Don't have an account? Register here
@@ -109,25 +118,31 @@ const styles = StyleSheet.create({
   },
   label: {
     marginBottom: 8,
+    fontFamily: 'serif'
   },
   input: {
-    height: 40,
+    height: 45,
     borderColor: "#ccc",
     borderWidth: 1,
-    marginBottom: 12,
+    marginBottom: 20,
     paddingHorizontal: 8,
+    fontFamily: 'serif',
+    fontSize: 15
   },
   passwordContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     borderColor: '#ccc',
     borderWidth: 1,
-    marginBottom: 12,
+    marginBottom: 25,
     paddingHorizontal: 8,
+    borderRadius: 5
 },
 passwordInput: {
     flex: 1,
     height: 40,
+    fontFamily: 'serif',
+    fontSize: 15
 },
   error: {
     color: "red",
@@ -135,9 +150,35 @@ passwordInput: {
   },
   registerText: {
     color: "blue",
-    textDecorationLine: "underline",
+    textDecorationLine: "none",
+    textAlign: 'center',
+    fontSize: 17,
+    fontFamily: 'serif'
   },
- 
+  button:{
+    backgroundColor: '#eb6434',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    marginBottom: 10
+  },
+  buttonText: {
+    fontSize: 17,
+    color: '#fff',
+    paddingVertical: 1, // Padding inside the button text
+    paddingHorizontal: 10, // Padding inside the button text
+    textAlign: 'center',
+    fontFamily: 'serif'
+  },
+  image: {
+    width: 200,
+    height: 200,
+    borderRadius: 10, // Example of styling
+  },
+  imgCont: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  }
 });
 
 export default LoginForm;

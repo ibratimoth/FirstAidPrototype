@@ -7,6 +7,9 @@ import * as ImagePicker from 'expo-image-picker';
 import { Video } from 'expo-av';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import { useAuth } from '../context/auth'
+import { useFonts, Inter_400Regular, Inter_600SemiBold } from '@expo-google-fonts/inter';
+import { Roboto_400Regular } from '@expo-google-fonts/roboto';
 
 const ContentDetails = () => {
   const route = useRoute();
@@ -16,6 +19,14 @@ const ContentDetails = () => {
   const [videoUri, setVideoUri] = useState(null);
   const [categories, setCategories] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const [auth, setAuth] = useAuth()
+
+  // Load Google Fonts
+  let [fontsLoaded] = useFonts({
+    Inter_400Regular,
+    Inter_600SemiBold,
+    Roboto_400Regular,
+  })
 
   useEffect(() => {
     fetchContent();
@@ -116,7 +127,6 @@ const ContentDetails = () => {
     <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator = {false}>
       <View>
-        <Text style={styles.title}>{content.title}</Text>
         {videoUri && (
           <Video
             source={{ uri: videoUri }}
@@ -127,8 +137,12 @@ const ContentDetails = () => {
         <Text style={styles.description}>{content.description}</Text>
         <Text style={styles.category}>Category: {content.category.injuryType}</Text>
         
-        <Button title="Update Content" onPress={() => setModalVisible(true)} />
-        <Button title="Delete Content" onPress={handleDelete} />
+        {auth?.user?.role === 2 && (
+            <>
+              <Button title="Update Content" onPress={() => setModalVisible(true)} />
+              <Button title="Delete Content" onPress={handleDelete} />
+            </>
+          )}
       </View>
       </ScrollView>
       <Modal
@@ -203,6 +217,7 @@ const ContentDetails = () => {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
+    fontFamily: 'Roboto_400Regular',
   },
   modalContainer: {
     padding: 20,
@@ -212,6 +227,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 10,
     padding: 8,
+    fontFamily: 'Roboto_400Regular',
   },
   picker: {
     borderWidth: 1,
@@ -224,15 +240,18 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: 'red',
+    fontFamily: 'Roboto_400Regular',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
+    fontFamily: 'Roboto_400Regular',
   },
   description: {
     fontSize: 18,
     marginVertical: 10,
     textAlign: 'justify',
+    fontFamily: 'Roboto_400Regular',
   },
   category: {
     fontSize: 18,

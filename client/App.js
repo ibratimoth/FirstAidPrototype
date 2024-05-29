@@ -32,6 +32,9 @@ import ContentDetails from "./screens/ContentDetails";
 import CreateFeedbackPage from "./screens/createFeedbackPage";
 import TechnicalContentPage from "./screens/TechnicalContentPage";
 import ContentFeedbackPage from "./screens/ContentFeedbackPage";
+import CategoryContentsScreen from "./screens/CategoryContentsScreen";
+import { useFonts, Inter_400Regular, Inter_600SemiBold } from '@expo-google-fonts/inter';
+import { Roboto_400Regular } from '@expo-google-fonts/roboto';
 
 
 // const toastConfig = {
@@ -125,6 +128,7 @@ const StackNav = () => {
         component={LoginForm}
         options={{
           headerShown: false,
+          statusBarColor: "#fff",
         }}
       />
       <Stack.Screen name="Splash" component={SplashScreenView} />
@@ -138,6 +142,7 @@ const StackNav = () => {
       <Stack.Screen name="feedback" component={CreateFeedbackPage} />
       <Stack.Screen name="technical" component={TechnicalContentPage} />
       <Stack.Screen name="contentfeed" component={ContentFeedbackPage} />
+      <Stack.Screen name="CategoryContents" component={CategoryContentsScreen} />
     
       {/* <Stack.Screen
         name="RegisterForm"
@@ -178,7 +183,8 @@ const AuthStack = () => {
       headerTitleAlign: "center",
     }}
     >
-      <Stack.Screen name="LoginForm" component={LoginForm} options={{ headerShown: false}} />
+      <Stack.Screen name="LoginForm" component={LoginForm} options={{ headerShown: false, 
+          statusBarColor: "#f5f7fa"}} />
       <Stack.Screen name="RegisterForm" component={RegistrationScreen} options={{ headerShown: false }} />
       <Stack.Screen
         name="Home"

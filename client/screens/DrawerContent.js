@@ -8,7 +8,10 @@ import  Icon  from "react-native-vector-icons/MaterialCommunityIcons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from 'axios'
 import Toast from 'react-native-toast-message';
+import { useFonts, Inter_400Regular, Inter_600SemiBold } from '@expo-google-fonts/inter';
+import { Roboto_400Regular } from '@expo-google-fonts/roboto';
 import {useAuth} from '../context/auth'
+
 const DrawerList = [
     {icon: 'home-outline', label: 'Home', navigateTo: 'Home'},
     {icon: 'account-multiple', label: 'Profile', navigateTo: 'Profile'},
@@ -75,18 +78,13 @@ const DrawerContent = (props) => {
     navigation.navigate('LoginForm');
   };
 
-//     const [userData, setUserData] = useState('')
-//   async function getData(){
-//     const token = await AsyncStorage.getItem('token') 
-//     console.log(token);
-//     axios.post("http://192.168.211.231:8080/api/v1/auth/getsingleUser", {token: token})
-//     .then(res => {console.log(res.data);
-//     setUserData(res.data.data)})
-//   }
+// Load Google Fonts
+let [fontsLoaded] = useFonts({
+    Inter_400Regular,
+    Inter_600SemiBold,
+    Roboto_400Regular,
+  })
 
-//   useEffect(() => {
-//     getData();
-//   }, [])
   return (
     <View style={{flex: 1}}>
       <DrawerContentScrollView {...props}>
@@ -111,7 +109,7 @@ const DrawerContent = (props) => {
                 </View>
             </TouchableOpacity>
             <View style={styles.drawerSection}>
-                <DrawerItems/>
+                <DrawerItems style={styles.drawerIt}/>
             </View>
         </View>
       </DrawerContentScrollView>
@@ -134,26 +132,32 @@ const styles = StyleSheet.create({
     },
     userInfoSection:{
         paddingLeft: 20,
+        fontFamily: 'Roboto_400Regular'
     },
     title: {
         fontSize: 16,
         marginTop: 3,
         fontWeight: 'bold',
+        fontFamily: 'Roboto_400Regular'
     },
     caption: {
         fontSize: 13,
-        lineHeight: 14
+        lineHeight: 14,
+        fontFamily: 'Roboto_400Regular'
     },
     drawerSection: {
         marginTop: 25,
         paddingLeft: 15,
         borderBottomColor: '#e3e3de',
-        borderBottomWidth: 1
+        borderBottomWidth: 1,
     },
     bottomDrawerSection: {
         borderTopColor: '#e3e3de',
         borderTopWidth: 1,
         borderBottomWidth: 0,
+    },
+    drawerIt:{
+        fontFamily: 'Roboto_400Regular'
     }
 })
 export default DrawerContent

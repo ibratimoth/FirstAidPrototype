@@ -22,7 +22,7 @@ const ProfileScreen = () => {
     const token = await AsyncStorage.getItem("token");
     console.log(token);
     axios
-      .post("http://192.168.211.231:8080/api/v1/auth/getsingleUser", {
+      .post("http://192.168.211.147:8080/api/v1/auth/getsingleUser", {
         token: token,
       })
       .then((res) => {

@@ -15,6 +15,7 @@ import {useAuth} from '../context/auth'
 const DrawerList = [
     {icon: 'home-outline', label: 'Home', navigateTo: 'Home'},
     {icon: 'account-multiple', label: 'Profile', navigateTo: 'Profile'},
+    {icon: 'account-multiple', label: 'Content', navigateTo: 'ContentScreen'},
     {icon: 'login-variant', label: 'Admin', navigateTo: 'Admin'},
     {icon: 'login-variant', label: 'Nurse', navigateTo: 'Nurse'},
     {icon: 'message', label: 'feedback', navigateTo: 'feedback'},

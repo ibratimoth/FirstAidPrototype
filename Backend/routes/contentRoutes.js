@@ -7,18 +7,22 @@ const {
     deleteContentController,
     searchContentController,
     getContentByCategoryController,
-    getVideoById,
-    getContentsByCategoryController
+    getContentsByCategoryController,
+    makeContentController,
+    getFileController
 } = require('../controllers/contentController')
 const { requireSignIn, isNurse } = require('../middlewares/authMiddleware')
+const formidable = require('express-formidable')
 const router = express.Router()
 
 //routes
 //post content
 router.post('/create-content', requireSignIn, isNurse, createContentController)
+//post content
+router.post('/make-content', requireSignIn, isNurse,formidable(), makeContentController)
 
 //update-content
-router.put('/update-content/:id', requireSignIn, isNurse, updateContentController);
+router.put('/update-content/:id', requireSignIn, isNurse, formidable(), updateContentController);
 
 //get all content controller
 router.get('/get-all-content', requireSignIn,getAllContentController);
@@ -26,8 +30,9 @@ router.get('/get-all-content', requireSignIn,getAllContentController);
 // Get single content route
 router.get('/get-content/:id', requireSignIn,  getSingleContentController);
 
-// Route to get video by ID
-router.get('/video/:id', requireSignIn, getVideoById);
+
+//get the file
+router.get('/get-file/:id', requireSignIn, isNurse, getFileController);
 
 //Route to get content by category
 router.get('/category/:categoryId', requireSignIn, getContentsByCategoryController);

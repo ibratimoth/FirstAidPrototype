@@ -26,7 +26,7 @@ const CategoryPage = () => {
   const fetchCategories = async () => {
     try {
       const response = await axios.get(
-        "http://192.168.211.231:8082/api/v1/category/get-category"
+        "http://192.168.211.147:8082/api/v1/category/get-category"
       );
       setCategories(response.data.categories);
     } catch (error) {
@@ -38,7 +38,7 @@ const CategoryPage = () => {
   const handleCreateCategory = async () => {
     try {
       const response = await axios.post(
-        "http://192.168.211.231:8082/api/v1/category/create-category",
+        "http://192.168.211.147:8082/api/v1/category/create-category",
         { injuryType: newCategory }
       );
       setCategories([...categories, response.data.category]);
@@ -53,7 +53,7 @@ const CategoryPage = () => {
   const handleUpdateCategory = async (id) => {
     try {
       const response = await axios.put(
-        `http://192.168.211.231:8082/api/v1/category/update-category/${id}`,
+        `http://192.168.211.147:8082/api/v1/category/update-category/${id}`,
         { injuryType: updatedCategory }
       );
       const updatedCategories = categories.map((category) =>
@@ -72,7 +72,7 @@ const CategoryPage = () => {
   const handleDeleteCategory = async () => {
     try {
       await axios.delete(
-        `http://192.168.211.231:8082/api/v1/category/delete-category/${deleteId}`
+        `http://192.168.211.147:8082/api/v1/category/delete-category/${deleteId}`
       );
       setCategories(categories.filter((category) => category._id !== deleteId));
       setDeleteId(null);

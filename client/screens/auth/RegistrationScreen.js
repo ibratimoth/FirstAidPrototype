@@ -41,7 +41,7 @@ const RegistrationScreen = ({ navigation }) => {
       sport,
     };
     const res = await axios.post(
-      "http://192.168.211.231:8082/api/v1/auth/register",
+      "http://192.168.211.147:8082/api/v1/auth/register",
       userData
     );
     if (res.data.success) {

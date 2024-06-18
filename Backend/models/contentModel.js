@@ -9,10 +9,6 @@ const contentSchema = new mongoose.Schema(
       trim: true,
       maxlength: 50,
     },
-    description: {
-      type: String,
-      required: true,
-    },
     category: {
       type: mongoose.ObjectId,
       ref: 'Category',
@@ -22,10 +18,10 @@ const contentSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    video: {
-      type: mongoose.ObjectId, // Store the GridFS file ID
-      ref: 'videos.files', // Reference the files collection in GridFS
-    },
+    description: {
+      type: String,
+      required: true,
+    }
   },
   { timestamps: true }
 );

@@ -3,6 +3,9 @@ const { hashPassword, comparePassword } = require("../helpers/authHelper");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const cloudinary = require('cloudinary')
+const { getDataUri } = require('../utils/features')
+const cookieParser = require('cookie-parser')
 const dotenv = require('dotenv')
 
 const registerController = async (req,res) => {
@@ -213,27 +216,6 @@ const updateUserProfile = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-  // try {
-  //   const { name, email, contact, city, sport } = req.body;
-  //   //  validation
-  // if (!name || !email || !contact || !city || !sport) {
-  //   return res.send({
-  //     message: "All fields must be filled",
-  //   });
-  // }
-  // if (!validator.isEmail(email)) {
-  //   return res.send({
-  //     message: "Email is not valid",
-  //   });
-  // }
-
-  // await userModel.updateOne({email: email}, {$set:{
-  //   name, email, contact, city, sport
-  // }})
-  // res.send({status: 'Ok', data: "Updated"})
-  // } catch (error) {
-  //   res.send({ status: "error", data: error });
-  // }
   const { name, email, city, contact, sport } = req.body;
   try {
     const user = await userModel.findOne({email: email});
@@ -260,6 +242,36 @@ const updateUser = async (req, res) => {
  
 };
 
+const profilePicController = async (req, res) => {
+    try {
+      const user = await userModel.findById(req.user._id);
+      // file get from client photo
+      const file = getDataUri(req.file);
+      // delete prev image
+      // await cloudinary.v2.uploader.destroy(user.profilePic.public_id);
+      // update
+      const cdb = await cloudinary.v2.uploader.upload(file.content);
+      user.profilePic = {
+        public_id: cdb.public_id,
+        url: cdb.secure_url,
+      };
+      // save func
+      await user.save();
+  
+      res.status(200).send({
+        success: true,
+        message: "profile picture updated",
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).send({
+        success: false,
+        message: "Error In update profile pic API",
+        error,
+      });
+    }
+  }
+
 module.exports = {
   registerController,
   loginController,
@@ -267,5 +279,6 @@ module.exports = {
   getAllUsers,
   updateUserRole,
   getUserProfile,
-  updateUserProfile
+  updateUserProfile,
+  profilePicController
 };

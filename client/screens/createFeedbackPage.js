@@ -16,7 +16,7 @@ const CreateFeedbackPage = () => {
 
   const fetchTitles = async () => {
     try {
-      const response = await axios.get('http://192.168.211.231:8082/api/v1/feedback/titles');
+      const response = await axios.get('http://192.168.211.147:8082/api/v1/feedback/titles');
       setTitles(response.data.titles);
     } catch (error) {
       console.error('Error fetching titles:', error);
@@ -26,7 +26,7 @@ const CreateFeedbackPage = () => {
 
   const handleSubmit = async () => {
     try {
-      const response = await axios.post('http://192.168.211.231:8082/api/v1/feedback/create-feedback', {
+      const response = await axios.post('http://192.168.211.147:8082/api/v1/feedback/create-feedback', {
         title: selectedTitle,
         description: comment,
         user: auth?.user?._id, // Replace 'user_id' with the actual user ID

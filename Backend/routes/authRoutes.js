@@ -5,9 +5,11 @@ const {registerController,
     getAllUsers,
     updateUserRole,
     getUserProfile,
-    updateUserProfile
+    updateUserProfile,
+    profilePicController
 } = require('../controllers/authController')
 const {isAdmin, requireSignIn } = require('../middlewares/authMiddleware')
+const {singleUpload} = require('../middlewares/multer')
 
 const router = express.Router()
 
@@ -31,6 +33,9 @@ router.put('/updateuser/:id',requireSignIn, updateUserProfile)
 
 //update user
 router.post('/update-user', updateUser)
+
+//profile pic
+router.post("/profile-picture", requireSignIn, singleUpload, profilePicController);
 
 router.get('/user-auth',requireSignIn, (req,res) => {
     res.status(200).send({ ok: true});

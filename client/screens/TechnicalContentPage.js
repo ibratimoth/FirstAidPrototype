@@ -12,7 +12,7 @@ const TechnicalContentPage = () => {
 
   const fetchTechnicalFeedback = async () => {
     try {
-      const response = await axios.get('http://192.168.211.231:8082/api/v1/feedback/technical-feedback');
+      const response = await axios.get('http://192.168.211.147:8082/api/v1/feedback/technical-feedback');
       setFeedbackList(response.data.feedback);
     } catch (error) {
       console.error('Error fetching technical feedback:', error);

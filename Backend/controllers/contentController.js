@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Grid = require("gridfs-stream");
 const multer = require("multer");
 const { GridFsStorage } = require("multer-gridfs-storage");
+const fs = require('fs')
 const dotenv = require("dotenv");
 const connectDB = require("../config/db");
 const contentModel = require("../models/contentModel");
@@ -93,129 +94,126 @@ const createContentController = async (req, res) => {
   }
 };
 
-// Controller to handle video retrieval
-const getVideoById = (req, res) => {
+const makeContentController = async (req, res) => {
   try {
-    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-      return res.status(400).json({ err: 'Invalid video ID' });
+    const { title, category, description } = req.fields
+    // const { pdf } = req.files
+
+    const categoryDetails = await mongoose.model('Category').findById(category).select('injuryType');
+    if (!categoryDetails) {
+      return res.status(404).json({
+        success: false,
+        message: 'category not found.',
+      });
     }
 
-    const videoId = new mongoose.Types.ObjectId(req.params.id);
+    const newContent = new contentModel({
+      title,
+      category,
+      description,
+      injuryType: categoryDetails.injuryType 
+    });
 
-    if (!gfs) {
-      return res.status(500).json({ err: 'GridFS not initialized' });
+  //   if (pdf) {
+  //     newContent.pdf.data = fs.readFileSync(pdf.path); // Update to handle pdf file
+  //     newContent.pdf.contentType = pdf.type; // Update to handle pdf file
+  // }
+
+   // Save the content to the database
+   await newContent.save();
+
+   // Populate the category field with the injuryType
+   const populatedContent = await newContent.populate('category', 'injuryType');
+
+   res.status(201).json({
+     success: true,
+     message: 'Content created successfully.',
+     content: populatedContent,
+   });
+  
+  } catch (error) {
+    console.log(error);
+        res.status(500).send({
+            success: false,
+            message: 'Error while creating content',
+            error
+        });
+  }
+}
+
+const updateContentController = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, category, description } = req.fields;
+    // const { pdf } = req.files;
+
+    // Validate required fields
+    if (!title || !category || !description) {
+      return res.status(400).json({
+        success: false,
+        message: 'All fields (title, category) are required.',
+      });
     }
 
-    gfs.files.findOne({ _id: videoId }, (err, file) => {
-      if (err) {
-        console.error('Error finding file:', err);
-        return res.status(500).json({ err: 'Error finding file' });
-      }
+    // Validate PDF file size if provided
+    // if (pdf && pdf.size > 1000000) {
+    //   return res.status(400).json({
+    //     success: false,
+    //     message: 'PDF should be less than 1MB',
+    //   });
+    // }
 
-      if (!file || file.length === 0) {
-        return res.status(404).json({ err: 'No file exists' });
-      }
+    // Find the existing content
+    const existingContent = await contentModel.findById(id);
+    if (!existingContent) {
+      return res.status(404).json({
+        success: false,
+        message: 'Content not found.',
+      });
+    }
 
-      if (file.contentType === 'video/mp4' || file.contentType === 'video/webm') {
-        const readstream = gridfsBucket.openDownloadStream(file._id);
-        res.set('Content-Type', file.contentType);
-        readstream.pipe(res);
-      } else {
-        res.status(404).json({ err: 'Not a video' });
-      }
+    // Find category details
+    const categoryDetails = await mongoose.model('Category').findById(category).select('injuryType');
+    if (!categoryDetails) {
+      return res.status(404).json({
+        success: false,
+        message: 'Category not found.',
+      });
+    }
+
+    // Update content fields
+    existingContent.title = title;
+    existingContent.category = category;
+    existingContent.description = description;
+    existingContent.injuryType = categoryDetails.injuryType;
+
+    // Handle PDF file
+    // if (pdf) {
+    //   existingContent.pdf.data = fs.readFileSync(pdf.path);
+    //   existingContent.pdf.contentType = pdf.type;
+    // }
+
+    // Save the updated content to the database
+    await existingContent.save();
+
+    // Populate the category field with the injuryType
+    const populatedContent = await existingContent.populate('category', 'injuryType');
+
+    // Respond with success
+    res.status(200).json({
+      success: true,
+      message: 'Content updated successfully.',
+      content: populatedContent,
     });
   } catch (error) {
-    console.error('Error retrieving video:', error);
-    return res.status(500).json({ err: 'Error retrieving video' });
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: 'Error while updating content',
+      error,
+    });
   }
 };
-// // Controller to handle fetching video by ID
-// const getVideoById = async (req, res) => {
-//   try {
-//     const videoId = new ObjectId(req.params.id);
-
-//     gfs.files.findOne({ _id: videoId }, (err, file) => {
-//       if (!file || file.length === 0) {
-//         return res.status(404).json({
-//           success: false,
-//           message: 'No file exists',
-//         });
-//       }
-
-//       // Check if the file is a video
-//       if (file.contentType === 'video/mp4' || file.contentType === 'video/webm') {
-//         // Read output to browser
-//         const readstream = gfs.createReadStream(file.filename);
-//         readstream.pipe(res);
-//       } else {
-//         res.status(404).json({
-//           success: false,
-//           message: 'Not a video file',
-//         });
-//       }
-//     });
-//   } catch (error) {
-//     console.error('Error fetching video:', error);
-//     return res.status(500).json({
-//       success: false,
-//       message: 'Error fetching video.',
-//       error: error.message,
-//     });
-//   }
-// };
-
-  const updateContentController = async (req, res) => {
-    try {
-      // Handle file upload
-      upload(req, res, async function (err) {
-        if (err) {
-          console.error('Error uploading video:', err);
-          return res.status(500).json({
-            success: false,
-            message: 'Error uploading video.',
-            error: err.message,
-          });
-        }
-  
-        const { id } = req.params;
-        const { title, description, category } = req.body;
-  
-        // Find the content by ID
-        const content = await contentModel.findById(id);
-        if (!content) {
-          return res.status(404).json({
-            success: false,
-            message: 'Content not found.',
-          });
-        }
-  
-        // Update fields
-        content.title = title || content.title;
-        content.description = description || content.description;
-        content.category = category || content.category;
-        if (req.file) {
-          content.video = req.file.filename; // Update the video filename if a new file is uploaded
-        }
-  
-        // Save the updated content to the database
-        await content.save();
-      // Populate the category field with the injuryType
-      const populatedContent = await content.populate('category', 'injuryType')
-        res.status(200).json({
-          success: true,
-          message: 'Content updated successfully.',
-          content: populatedContent,
-        });
-      });
-    } catch (error) {
-      console.error('Error updating content:', error);
-      return res.status(500).json({
-        success: false,
-        message: 'Error updating content.',
-        error: error.message,
-      });
-    }
-  };
 
   // Get all content controller
 const getAllContentController = async (req, res) => {
@@ -303,14 +301,12 @@ const getContentsByCategoryController = async (req, res) => {
   }
 };
 
-// Delete content controller
 const deleteContentController = async (req, res) => {
   try {
     const { id } = req.params;
 
     // Find the content by ID
     const content = await contentModel.findById(id);
-
     if (!content) {
       return res.status(404).json({
         success: false,
@@ -318,33 +314,53 @@ const deleteContentController = async (req, res) => {
       });
     }
 
-    // If there is a video file, delete it from GridFS
-    if (content.video) {
-      await gridfsBucket.delete(new mongoose.Types.ObjectId(content.video), (err) => {
-        if (err) {
-          console.error('Error deleting video file from GridFS:', err);
-          return res.status(500).json({
-            success: false,
-            message: 'Error deleting video file.',
-            error: err.message,
-          });
-        }
-      });
-    }
-
-    // Delete the content from the database
-    await contentModel.findByIdAndDelete(id);
+    // Delete the content
+    await content.remove();
 
     res.status(200).json({
       success: true,
       message: 'Content deleted successfully.',
     });
   } catch (error) {
-    console.error('Error deleting content:', error);
+    console.log(error);
     res.status(500).json({
       success: false,
-      message: 'Error deleting content.',
-      error: error.message,
+      message: 'Error while deleting content',
+      error,
+    });
+  }
+};
+
+const getFileController = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Find the content by ID
+    const content = await contentModel.findById(id);
+    if (!content) {
+      return res.status(404).json({
+        success: false,
+        message: 'Content not found.',
+      });
+    }
+
+    // Check if the content has a PDF file
+    if (!content.pdf || !content.pdf.data) {
+      return res.status(404).json({
+        success: false,
+        message: 'PDF file not found.',
+      });
+    }
+
+    // Send the PDF file
+    res.contentType(content.pdf.contentType);
+    res.send(content.pdf.data);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: 'Error while retrieving PDF file',
+      error,
     });
   }
 };
@@ -425,6 +441,7 @@ module.exports = { createContentController,
     deleteContentController,
     searchContentController,
     getContentByCategoryController,
-    getVideoById,
-    getContentsByCategoryController
+    getContentsByCategoryController,
+    makeContentController,
+    getFileController
  };

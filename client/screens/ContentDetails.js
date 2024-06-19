@@ -18,7 +18,7 @@ const { width } = Dimensions.get('window');
 const transformContentToHtml = (content) => {
   // Convert URLs into image tags
   let htmlContent = content.replace(/(https?:\/\/[^\s]+)/g, (url) => {
-    return `<img src="${url}" style="max-width: 100%; height: auto; display: block; margin: 10px 0;" />`;
+    return `<img src="${url}" style="max-width: 140%; height: 280px; display: block; margin: 10px 0;" />`;
   });
 
   // Format based on keywords (simple implementation)
@@ -329,6 +329,7 @@ const htmlStyles = {
     fontSize: 16,
     fontFamily: "serif",
     marginVertical: 10,
+    textAlign: 'justify',
   },
   ul: {
     marginVertical: 10,
@@ -340,10 +341,11 @@ const htmlStyles = {
     textAlign: 'justify',
   },
   img: {
-    maxWidth: '100%',
-    height: 'auto',
+    maxWidth: '50%',
+    height: '50%',
     display: 'block',
     marginVertical: 10,
+    resizeMode: 'cover',
   },
 };
 

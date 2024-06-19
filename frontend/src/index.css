@@ -1,0 +1,38 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Roboto, Helvetica, Arial, sans-serif;
+}
+/* Navbar stylings*/
+.navbar{
+  font-family: serif;
+  font-size: 17px;
+  line-height: 26px;
+  text-transform: uppercase;
+  box-shadow: 0 8px 6px -6px #eb6434;
+  --webkit-box-shadow: 0 8px 6px -6px #eb6434;
+  border-bottom: 0.5px solid #eb6434 !important;
+}
+
+.nav-link {
+  font-weight: 300 !important
+}
+
+.active{
+  border-bottom: 2px solid #eb6434;
+}
+
+.navbar-brand{
+  font-weight: 700;
+  letter-spacing: 4px;
+}
+
+/* Nurse page */
+.custom-hover:hover {
+  background-color: black !important;
+  color: white !important;
+}

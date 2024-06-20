@@ -22,7 +22,7 @@ router.post('/create-content', requireSignIn, isNurse, createContentController)
 router.post('/make-content', requireSignIn, isNurse,formidable(), makeContentController)
 
 //update-content
-router.put('/update-content/:id', requireSignIn, isNurse, formidable(), updateContentController);
+router.put('/update-content/:id', requireSignIn, isNurse, updateContentController);
 
 //get all content controller
 router.get('/get-all-content', requireSignIn,getAllContentController);

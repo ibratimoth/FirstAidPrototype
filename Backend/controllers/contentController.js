@@ -144,7 +144,7 @@ const makeContentController = async (req, res) => {
 const updateContentController = async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, category, description } = req.fields;
+    const { title, category, description } = req.body;
     // const { pdf } = req.files;
 
     // Validate required fields
@@ -305,17 +305,14 @@ const deleteContentController = async (req, res) => {
   try {
     const { id } = req.params;
 
-    // Find the content by ID
-    const content = await contentModel.findById(id);
+    // Find and delete the content by ID
+    const content = await contentModel.findByIdAndDelete(id);
     if (!content) {
       return res.status(404).json({
         success: false,
         message: 'Content not found.',
       });
     }
-
-    // Delete the content
-    await content.remove();
 
     res.status(200).json({
       success: true,

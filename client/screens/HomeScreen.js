@@ -370,6 +370,11 @@ const HomeScreen = () => {
     );
   }
 
+  const emergencyNumbers = [
+    { number: '112', label: 'Police' },
+    { number: '114', label: 'Ambulance' }
+  ];
+
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.title}>Welcome to the SLF Aid</Text>
@@ -418,21 +423,21 @@ const HomeScreen = () => {
       <View style={styles.row}>
         <Text style={styles.sectionTitle}>Emergency Numbers</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.horizontalScroll}>
-          {['112', '114'].map(number => (
+          {emergencyNumbers.map(emergency => (
             <TouchableOpacity
-              key={number}
+              key={emergency.number}
               style={styles.item}
-              onPress={() => handleEmergencyCall(number)}
+              onPress={() => handleEmergencyCall(emergency.number)}
             >
-              <Text style={styles.itemText}>{number}</Text>
+              <Text style={styles.itemText}>{emergency.number} ({emergency.label})</Text>
             </TouchableOpacity>
           ))}
         </ScrollView>
       </View>
       <View style={styles.row}>
         <TouchableOpacity
-        style={styles.ite}
-        onPress={() => navigation.navigate('HospitalMap')}>
+          style={styles.ite}
+          onPress={() => navigation.navigate('HospitalMap')}>
           <Text style={styles.itemTex}>Check for nearby hospital</Text>
         </TouchableOpacity>
       </View>
@@ -533,7 +538,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
+  }
 });
 
 export default HomeScreen;

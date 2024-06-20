@@ -24,6 +24,19 @@ const CreatedContent = () => {
         }
       };
     
+      const deleteContent = async (contentId) => {
+        try {
+            const { data } = await axios.delete(`http://localhost:8082/api/v1/content/delete-content/${contentId}`);
+            if (data.success) {
+                toast.success("Content deleted successfully");
+                setContents(contents.filter(content => content._id !== contentId));
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error("Something went wrong while deleting content");
+        }
+    }
+    
       useEffect(() => {
         getAllContents();
       }, []);
@@ -54,7 +67,7 @@ const CreatedContent = () => {
                         <td key={c._id}>{c.injuryType}</td>
                         <td>
                           <button className="btn btn-primary ms-2" onClick={() => navigate('/dashboard/user/content', { state: { contentId: c._id } })}>View</button>
-                          <button className="btn btn-danger ms-2" >Delete</button>
+                          <button className="btn btn-danger ms-2" onClick={() => deleteContent(c._id)}>Delete</button>
                         </td>
                       </tr>
                     </>

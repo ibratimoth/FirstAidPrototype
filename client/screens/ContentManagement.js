@@ -4,15 +4,12 @@ import RNPickerSelect from 'react-native-picker-select';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
-import * as ImagePicker from 'expo-image-picker';
-import { Video } from 'expo-av';
 import { useNavigation } from '@react-navigation/native';
 
 const ContentManagement = () => {
   const [categories, setCategories] = useState([]);
   const [contents, setContents] = useState([]);
   const [selectedContent, setSelectedContent] = useState(null);
-  const [videoUri, setVideoUri] = useState(null);
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -44,37 +41,22 @@ const ContentManagement = () => {
 
   const handleSubmit = async (values) => {
     try {
-      const formData = new FormData();
-      formData.append('title', values.title);
-      formData.append('description', values.description);
-      formData.append('category', values.category);
-      if (values.video) {
-        formData.append('video', {
-          uri: values.video.uri,
-          type: 'video/mp4',
-          name: values.video.uri.split('/').pop(),
-        });
-      }
+      const formData = {
+        title: values.title,
+        description: values.description,
+        category: values.category,
+      };
 
       if (selectedContent) {
-        await axios.put(`http://192.168.211.147:8082/api/v1/content/update-content/${selectedContent._id}`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
+        await axios.put(`http://192.168.211.147:8082/api/v1/content/update-content/${selectedContent._id}`, formData);
         Alert.alert('Success', 'Content updated successfully');
       } else {
-        await axios.post('http://192.168.211.147:8082/api/v1/content/create-content', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
+        await axios.post('http://192.168.211.147:8082/api/v1/content/create-content', formData);
         Alert.alert('Success', 'Content created successfully');
       }
 
       fetchContents();
       setSelectedContent(null);
-      setVideoUri(null);
     } catch (error) {
       Alert.alert('Error', `Could not ${selectedContent ? 'update' : 'create'} content`);
     }
@@ -86,23 +68,6 @@ const ContentManagement = () => {
     category: Yup.string().required('Category is required'),
   });
 
-  const selectVideo = async (setFieldValue) => {
-    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (permissionResult.granted === false) {
-      Alert.alert('Permission denied', 'You need to allow access to your media library');
-      return;
-    }
-
-    let pickerResult = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Videos,
-    });
-
-    if (!pickerResult.canceled) {
-      setVideoUri(pickerResult.uri);
-      setFieldValue('video', pickerResult);
-    }
-  };
-
   return (
     <SafeAreaView style={styles.container}>
       <Formik
@@ -110,7 +75,6 @@ const ContentManagement = () => {
           title: selectedContent ? selectedContent.title : '',
           description: selectedContent ? selectedContent.description : '',
           category: selectedContent ? selectedContent.category._id : '',
-          video: null,
         }}
         enableReinitialize
         validationSchema={validationSchema}
@@ -122,7 +86,7 @@ const ContentManagement = () => {
             <RNPickerSelect
               onValueChange={(itemValue) => setFieldValue('category', itemValue)}
               items={categories.map((category) => ({
-                label: category.injuryType,
+                label: category.injuryType, // Assuming category has a 'name' field
                 value: category._id,
                 key: category._id,
               }))}
@@ -169,34 +133,19 @@ const ContentManagement = () => {
             />
             {touched.description && errors.description && <Text style={styles.errorText}>{errors.description}</Text>}
 
-            <TouchableOpacity style={styles.button} onPress={() => selectVideo(setFieldValue)}>
-        <Text style={styles.buttonText}>SELECT VIDEO</Text>
-      </TouchableOpacity>
-            {videoUri && (
-              <Video
-                source={{ uri: videoUri }}
-                style={styles.video}
-                useNativeControls
-              />
-            )}
-            {selectedContent ? (
-        <TouchableOpacity onPress={handleSubmit} style={styles.button}>
-          <Text style={styles.buttonText}>UPDATE CONTENT</Text>
-        </TouchableOpacity>
-      ) : (
-        <TouchableOpacity onPress={handleSubmit} style={styles.button}>
-          <Text style={styles.buttonText}>CREATE CONTENT</Text>
-        </TouchableOpacity>
-      )}
+            <TouchableOpacity onPress={handleSubmit} style={styles.button}>
+              <Text style={styles.buttonText}>{selectedContent ? 'UPDATE CONTENT' : 'CREATE CONTENT'}</Text>
+            </TouchableOpacity>
           </View>
         )}
       </Formik>
-<Text style= {styles.acontent}>Available contents</Text>
+
+      <Text style={styles.acontent}>Available contents</Text>
       <FlatList
         data={contents}
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
-          <TouchableOpacity style = {styles.content} onPress={() => handleSelectContent(item)}>
+          <TouchableOpacity style={styles.content} onPress={() => handleSelectContent(item)}>
             <Text style={styles.title}>{item.title}</Text>
           </TouchableOpacity>
         )}
@@ -228,11 +177,6 @@ const styles = StyleSheet.create({
     color: 'black',
     paddingRight: 30, // to ensure the text is never behind the icon
   },
-  video: {
-    width: '100%',
-    height: 200,
-    marginVertical: 10,
-  },
   errorText: {
     color: 'red',
     fontFamily: 'serif',
@@ -251,7 +195,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 10
   },
-  button:{
+  button: {
     backgroundColor: '#eb6434',
     paddingVertical: 10,
     paddingHorizontal: 20,

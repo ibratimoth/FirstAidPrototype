@@ -145,7 +145,7 @@ const HospitalMap = () => {
   useEffect(() => {
     const fetchHospitals = async () => {
       try {
-        const response = await axios.get('http://192.168.211.147:8082/api/hospitals');
+        const response = await axios.get('http://192.168.211.185:8082/api/hospitals');
         setHospitals(response.data);
       } catch (error) {
         console.error(error);
@@ -181,7 +181,7 @@ const HospitalMap = () => {
     };
 
     try {
-      const response = await axios.post('http://192.168.211.147:8082/api/createhospitals', newHospital);
+      const response = await axios.post('http://192.168.211.185:8082/api/createhospitals', newHospital);
       setHospitals([...hospitals, response.data]);
       setName('');
       setAddress('');

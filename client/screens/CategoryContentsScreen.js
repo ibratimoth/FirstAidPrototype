@@ -19,7 +19,7 @@ const CategoryContentsScreen = () => {
 
   const fetchContentsByCategory = async () => {
     try {
-      const response = await axios.get(`http://192.168.211.147:8082/api/v1/content/category/${categoryId}`);
+      const response = await axios.get(`http://192.168.211.185:8082/api/v1/content/category/${categoryId}`);
       if (response.data.contents.length === 0) {
         setErrorMessage('This category is empty.');
       } else {

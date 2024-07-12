@@ -37,7 +37,7 @@ const LoginForm = () => {
       password,
     };
     const res = await axios.post(
-      "http://192.168.211.147:8082/api/v1/auth/login",
+      "http://192.168.211.185:8082/api/v1/auth/login",
       userData
     );
     if (res.data.success) {

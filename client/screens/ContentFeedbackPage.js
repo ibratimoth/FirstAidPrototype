@@ -13,7 +13,7 @@ const ContentFeedbackPage = () => {
   const fetchContentFeedback = async () => {
     try {
       const response = await axios.get(
-        "http://192.168.211.147:8082/api/v1/feedback/content-feedback"
+        "http://192.168.211.185:8082/api/v1/feedback/content-feedback"
       );
       setFeedbackList(response.data.feedback);
     } catch (error) {

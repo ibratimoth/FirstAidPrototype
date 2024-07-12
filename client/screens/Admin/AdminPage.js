@@ -23,7 +23,7 @@ const AdminPage = () => {
   const updateUserRole = async (userId, newRole) => {
     try {
       await axios.put(
-        `http://192.168.211.231:8082/api/v1/auth/userrole/${userId}/role`,
+        `http://192.168.211.185:8082/api/v1/auth/userrole/${userId}/role`,
         { role: newRole }
       );
       fetchUsers(); // Refresh the user list after update

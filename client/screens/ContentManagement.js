@@ -19,7 +19,7 @@ const ContentManagement = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get('http://192.168.211.147:8082/api/v1/category/get-category');
+      const response = await axios.get('http://192.168.211.185:8082/api/v1/category/get-category');
       setCategories(response.data.categories);
     } catch (error) {
       Alert.alert('Error', 'Could not fetch categories');
@@ -28,7 +28,7 @@ const ContentManagement = () => {
 
   const fetchContents = async () => {
     try {
-      const response = await axios.get('http://192.168.211.147:8082/api/v1/content/get-all-content');
+      const response = await axios.get('http://192.168.211.185:8082/api/v1/content/get-all-content');
       setContents(response.data.contents);
     } catch (error) {
       Alert.alert('Error', 'Could not fetch contents');
@@ -48,10 +48,10 @@ const ContentManagement = () => {
       };
 
       if (selectedContent) {
-        await axios.put(`http://192.168.211.147:8082/api/v1/content/update-content/${selectedContent._id}`, formData);
+        await axios.put(`http://192.168.211.185:8082/api/v1/content/update-content/${selectedContent._id}`, formData);
         Alert.alert('Success', 'Content updated successfully');
       } else {
-        await axios.post('http://192.168.211.147:8082/api/v1/content/create-content', formData);
+        await axios.post('http://192.168.211.185:8082/api/v1/content/create-content', formData);
         Alert.alert('Success', 'Content created successfully');
       }
 

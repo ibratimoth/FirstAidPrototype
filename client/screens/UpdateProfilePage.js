@@ -25,7 +25,7 @@ const UpdateProfilePage = () => {
 
     const handleUpdateProfile = async () => {
         try {
-            const response = await axios.put(`http://192.168.211.147:8082/api/v1/auth/updateuser/${auth.user._id}`, {
+            const response = await axios.put(`http://192.168.211.185:8082/api/v1/auth/updateuser/${auth.user._id}`, {
                 username,
                 email,
                 contact,

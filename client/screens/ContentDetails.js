@@ -68,11 +68,11 @@ const ContentDetails = () => {
 
   const fetchContent = async () => {
     try {
-      const response = await axios.get(`http://192.168.211.147:8082/api/v1/content/get-content/${contentId}`);
+      const response = await axios.get(`http://192.168.211.185:8082/api/v1/content/get-content/${contentId}`);
       const formattedDescription = transformContentToHtml(response.data.content.description);
       setContent({ ...response.data.content, formattedDescription });
       if (response.data.content.video) {
-        const videoResponse = await axios.get(`http://192.168.211.147:8082/api/v1/content/video/${response.data.content.video}`, {
+        const videoResponse = await axios.get(`http://192.168.211.185:8082/api/v1/content/video/${response.data.content.video}`, {
           responseType: 'blob',
         });
         const videoBlob = new Blob([videoResponse.data], { type: 'video/mp4' });
@@ -86,7 +86,7 @@ const ContentDetails = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get('http://192.168.211.147:8082/api/v1/category/get-category');
+      const response = await axios.get('http://192.168.211.185:8082/api/v1/category/get-category');
       setCategories(response.data.categories);
     } catch (error) {
       Alert.alert('Error', 'Could not fetch categories');
@@ -95,7 +95,7 @@ const ContentDetails = () => {
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`http://192.168.211.147:8082/api/v1/content/delete-content/${contentId}`);
+      await axios.delete(`http://192.168.211.185:8082/api/v1/content/delete-content/${contentId}`);
       Alert.alert('Success', 'Content deleted successfully');
       navigation.goBack();
     } catch (error) {
@@ -117,7 +117,7 @@ const ContentDetails = () => {
         });
       }
 
-      await axios.put(`http://192.168.211.147:8082/api/v1/content/update-content/${contentId}`, formData, {
+      await axios.put(`http://192.168.211.185:8082/api/v1/content/update-content/${contentId}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

@@ -147,7 +147,7 @@ const ContentScreen = () => {
 
   const fetchContents = async () => {
     try {
-      const response = await axios.get('http://192.168.211.147:8082/api/v1/content/get-all-content');
+      const response = await axios.get('http://192.168.211.185:8082/api/v1/content/get-all-content');
       setContents(response.data.contents);
     } catch (error) {
       console.error('Error fetching contents:', error);
@@ -181,11 +181,11 @@ const ContentScreen = () => {
 
     try {
       if (editingContentId) {
-        await axios.put(`http://192.168.211.147:8082/api/v1/content/update-content/${editingContentId}`, formData, {
+        await axios.put(`http://192.168.211.185:8082/api/v1/content/update-content/${editingContentId}`, formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
       } else {
-        await axios.post('http://192.168.211.147:8082/api/v1/content/create-content', formData, {
+        await axios.post('http://192.168.211.185:8082/api/v1/content/create-content', formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
       }
@@ -207,7 +207,7 @@ const ContentScreen = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://192.168.211.147:8082/api/v1/content/delete-content/${id}`);
+      await axios.delete(`http://192.168.211.185:8082/api/v1/content/delete-content/${id}`);
       fetchContents();
     } catch (error) {
       console.error('Error deleting content:', error);

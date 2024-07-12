@@ -290,7 +290,7 @@ const HomeScreen = () => {
 
   const fetchContents = async () => {
     try {
-      const response = await axios.get('http://192.168.211.147:8082/api/v1/content/get-all-content');
+      const response = await axios.get('http://192.168.211.185:8082/api/v1/content/get-all-content');
       setInjuries(response.data.contents);
       setInjuriesLoaded(true);
     } catch (error) {
@@ -301,7 +301,7 @@ const HomeScreen = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get('http://192.168.211.147:8082/api/v1/category/get-category');
+      const response = await axios.get('http://192.168.211.185:8082/api/v1/category/get-category');
       setCategories(response.data.categories);
       setCategoriesLoaded(true);
     } catch (error) {
